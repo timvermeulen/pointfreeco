@@ -148,7 +148,7 @@ private let routers: [Router<Route>] = [
 
   .account <<< .paymentInfo <<< .update
     <¢> post %> lit("account") %> lit("payment-info")
-    %> formField("token", Optional.iso.some >>> opt(.string >>> .tagged))
+    %> formField("token", Optional.iso.some >>> opt(.string >>> .newtype))
     <% end,
 
   .account <<< .subscription <<< .cancel

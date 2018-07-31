@@ -256,7 +256,7 @@ public struct Stripe {
       public private(set) var plan: Plan
       public private(set) var quantity: Int
 
-      public typealias Id = Tagged<Item, String>
+      public struct Id: Newtype, Codable { public let rawValue: String }
     }
 
     public enum Status: String, Codable {
@@ -287,7 +287,7 @@ public struct Stripe {
   public struct Token: Codable {
     public private(set) var id: Id
 
-    public typealias Id = Tagged<Token, String>
+    public struct Id: Newtype, Codable { public let rawValue: String }
   }
 }
 
