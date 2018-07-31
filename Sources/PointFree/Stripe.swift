@@ -46,7 +46,7 @@ public struct Stripe {
     public private(set) var id: Id
     public private(set) var last4: String
 
-    public typealias Id = Tagged<Card, String>
+    public struct Id: Equatable, Codable { public let rawValue: String }
 
     public enum Brand: String, Codable, Equatable {
       case visa = "Visa"
@@ -75,14 +75,14 @@ public struct Stripe {
     }
   }
 
-  public typealias Cents = Tagged<Stripe, Int>
+  public struct Cents: Newtype, Codable { public let rawValue: Int }
 
   public struct Charge: Codable {
     public private(set) var amount: Cents
     public private(set) var id: Id
     public private(set) var source: Card
 
-    public typealias Id = Tagged<Card, String>
+    public struct Id: Newtype, Codable { public let rawValue: String }
   }
 
   public struct Customer: Codable {
@@ -92,8 +92,8 @@ public struct Stripe {
     public private(set) var metadata: [String: String]
     public private(set) var sources: ListEnvelope<Card>
 
-    public typealias Id = Tagged<(Customer, id: ()), String>
-    public typealias Vat = Tagged<(Customer, vat: ()), String>
+    public struct Id: Newtype, Equatable, Codable { public let rawValue: String }
+    public struct Vat: Newtype, Codable { public let rawValue: String }
 
     private enum CodingKeys: String, CodingKey {
       case businessVatId = "business_vat_id"
@@ -121,7 +121,7 @@ public struct Stripe {
     public private(set) var id: Id
     public private(set) var type: `Type`
 
-    public typealias Id = Tagged<Event, String>
+    public struct Id: Newtype, Codable { public let rawValue: String }
 
     public struct Data: Codable {
       public private(set) var object: T
@@ -150,8 +150,8 @@ public struct Stripe {
     public private(set) var subtotal: Cents
     public private(set) var total: Cents
 
-    public typealias Id = Tagged<(Invoice, id: ()), String>
-    public typealias Number = Tagged<(Invoice, number: ()), String>
+    public struct Id: Newtype, Codable { public let rawValue: String }
+    public struct Number: Newtype, Codable { public let rawValue: String }
 
     private enum CodingKeys: String, CodingKey {
       case amountDue = "amount_remaining"
@@ -179,7 +179,7 @@ public struct Stripe {
     public private(set) var quantity: Int
     public private(set) var subscription: Subscription.Id?
 
-    public typealias Id = Tagged<LineItem, String>
+    public struct Id: Newtype, Codable { public let rawValue: String }
   }
 
   public struct ListEnvelope<A: Codable>: Codable {
@@ -202,7 +202,7 @@ public struct Stripe {
     public private(set) var name: String
     public private(set) var statementDescriptor: String?
 
-    public typealias Id = Tagged<Plan, String>
+    public struct Id: Newtype, Equatable, Codable, ExpressibleByStringLiteral { public let rawValue: String }
 
     public enum Currency: String, Codable {
       case usd
@@ -248,7 +248,7 @@ public struct Stripe {
       return self.status != .canceled && !self.cancelAtPeriodEnd
     }
 
-    public typealias Id = Tagged<Subscription, String>
+    public struct Id: Newtype, Codable { public let rawValue: String }
 
     public struct Item: Codable {
       public private(set) var created: Date
@@ -294,24 +294,6 @@ public struct Stripe {
 extension Stripe.ListEnvelope: Equatable where A: Equatable {
   public static func == (lhs: Stripe.ListEnvelope<A>, rhs: Stripe.ListEnvelope<A>) -> Bool {
     return lhs.data == rhs.data && lhs.hasMore == rhs.hasMore
-  }
-}
-
-extension Tagged where Tag == Stripe.Plan, RawValue == String {
-  static var individualMonthly: Stripe.Plan.Id {
-    return "individual-monthly"
-  }
-
-  static var individualYearly: Stripe.Plan.Id {
-    return "individual-yearly"
-  }
-
-  static var teamMonthly: Stripe.Plan.Id {
-    return "team-monthly"
-  }
-
-  static var teamYearly: Stripe.Plan.Id {
-    return "team-yearly"
   }
 }
 

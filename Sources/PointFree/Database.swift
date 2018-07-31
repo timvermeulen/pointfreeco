@@ -108,7 +108,7 @@ public struct Database {
     public internal(set) var name: String?
     public private(set) var subscriptionId: Subscription.Id?
 
-    public typealias Id = Tagged<User, UUID>
+    public struct Id: Newtype, Codable, Equatable { public let rawValue: UUID }
 
     public enum CodingKeys: String, CodingKey {
       case email
@@ -132,7 +132,7 @@ public struct Database {
     internal(set) var stripeSubscriptionStatus: Stripe.Subscription.Status
     internal(set) var userId: User.Id
 
-    public typealias Id = Tagged<Subscription, UUID>
+    public struct Id: Newtype, Equatable, Decodable { public let rawValue: UUID }
 
     private enum CodingKeys: String, CodingKey {
       case id
@@ -148,7 +148,7 @@ public struct Database {
     internal(set) var id: Id
     internal(set) var inviterUserId: User.Id
 
-    public typealias Id = Tagged<TeamInvite, UUID>
+    public struct Id: Newtype, Decodable { public let rawValue: UUID }
 
     private enum CodingKeys: String, CodingKey {
       case createdAt = "created_at"

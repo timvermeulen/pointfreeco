@@ -4,7 +4,7 @@ import Foundation
 import Prelude
 
 public struct BlogPost {
-  public typealias Id = Tagged<BlogPost, Int>
+    public struct Id: Newtype, ExpressibleByIntegerLiteral, Comparable { public let rawValue: Int }
 
   public private(set) var author: Author?
   public private(set) var blurb: String

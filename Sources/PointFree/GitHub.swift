@@ -53,7 +53,7 @@ public struct GitHub {
       public private(set) var primary: Bool
     }
 
-    public typealias Id = Tagged<User, Int>
+    public struct Id: Newtype, Equatable, Codable { public let rawValue: Int }
   }
 
   public struct UserEnvelope: Codable {

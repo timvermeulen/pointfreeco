@@ -19,7 +19,7 @@ public struct Mailgun {
   }
 }
 
-public typealias EmailAddress = Tagged<Email, String>
+public struct EmailAddress: Newtype, Equatable, Codable, ExpressibleByStringLiteral { public let rawValue: String }
 
 enum Tracking: String {
   case no

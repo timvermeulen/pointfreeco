@@ -60,13 +60,13 @@ public struct Pricing {
   var plan: Stripe.Plan.Id {
     switch (self.billing, self.quantity) {
     case (.monthly, 1):
-      return .individualMonthly
+      return "individual-monthly"
     case (.yearly, 1):
-      return .individualYearly
+      return "individual-yearly"
     case (.monthly, _):
-      return .teamMonthly
+      return "team-monthly"
     case (.yearly, _):
-      return .teamYearly
+      return "team-yearly"
     }
   }
 }

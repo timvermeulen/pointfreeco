@@ -46,7 +46,7 @@ public struct Episode {
     self.transcriptBlocks = transcriptBlocks
   }
 
-  public typealias Id = Tagged<Episode, Int>
+  public struct Id: Newtype, Equatable, Hashable, ExpressibleByIntegerLiteral { public let rawValue: Int }
 
   public var slug: String {
     return "ep\(self.sequence)-\(PointFree.slug(for: self.title))"

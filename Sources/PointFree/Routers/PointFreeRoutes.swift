@@ -129,7 +129,7 @@ private let routers: [Router<Route>] = [
 
   .account <<< .confirmEmailChange
     <¢> get %> lit("account") %> lit("confirm-email-change")
-    %> queryParam("payload", .appDecrypted >>> payload(.uuid >>> .tagged, .tagged))
+    %> queryParam("payload", .appDecrypted >>> payload(.uuid >>> .newtype, .newtype))
     <% end,
 
   .account <<< .index
@@ -139,7 +139,7 @@ private let routers: [Router<Route>] = [
     <¢> get %> lit("account") %> lit("invoices") <% end,
 
   .account <<< .invoices <<< .show
-    <¢> get %> lit("account") %> lit("invoices") %> pathParam(.string >>> .tagged) <% end,
+    <¢> get %> lit("account") %> lit("invoices") %> pathParam(.string >>> .newtype) <% end,
 
   .account <<< .paymentInfo <<< .show
     <¢> get %> lit("account") %> lit("payment-info")
@@ -170,7 +170,7 @@ private let routers: [Router<Route>] = [
 
   .admin <<< .episodeCredits <<< .add
     <¢> post %> lit("admin") %> lit("episode-credits") %> lit("add")
-    %> formField("user_id", Optional.iso.some >>> opt(.uuid >>> .tagged))
+    %> formField("user_id", Optional.iso.some >>> opt(.uuid >>> .newtype))
     <%> formField("episode_sequence", Optional.iso.some >>> opt(.int))
     <% end,
 
@@ -181,7 +181,7 @@ private let routers: [Router<Route>] = [
     <¢> get %> lit("admin") <% end,
 
   .admin <<< .freeEpisodeEmail <<< .send
-    <¢> post %> lit("admin") %> lit("free-episode-email") %> pathParam(.int >>> .tagged) <% lit("send") <% end,
+    <¢> post %> lit("admin") %> lit("free-episode-email") %> pathParam(.int >>> .newtype) <% lit("send") <% end,
 
   .admin <<< .freeEpisodeEmail <<< .index
     <¢> get %> lit("admin") %> lit("free-episode-email") <% end,
@@ -190,14 +190,14 @@ private let routers: [Router<Route>] = [
     <¢> get %> lit("admin") %> lit("new-blog-post-email") <% end,
 
   .admin <<< .newBlogPostEmail <<< PartialIso.send
-    <¢> post %> lit("admin") %> lit("new-blog-post-email") %> pathParam(.int >>> .tagged >>> .blogPostFromId) <%> lit("send")
+    <¢> post %> lit("admin") %> lit("new-blog-post-email") %> pathParam(.int >>> .newtype >>> .blogPostFromId) <%> lit("send")
     %> formField("subscriber_announcement", .string).map(Optional.iso.some)
     <%> formField("nonsubscriber_announcement", .string).map(Optional.iso.some)
     <%> isTest
     <% end,
 
   .admin <<< .newEpisodeEmail <<< PartialIso.send
-    <¢> post %> lit("admin") %> lit("new-episode-email") %> pathParam(.int >>> .tagged) <%> lit("send")
+    <¢> post %> lit("admin") %> lit("new-episode-email") %> pathParam(.int >>> .newtype) <%> lit("send")
     %> formField("subscriber_announcement", .string).map(Optional.iso.some)
     <%> formField("nonsubscriber_announcement", .string).map(Optional.iso.some)
     <%> isTest
@@ -229,7 +229,7 @@ private let routers: [Router<Route>] = [
 
   .expressUnsubscribe
     <¢> get %> lit("newsletters") %> lit("express-unsubscribe")
-    %> queryParam("payload", .appDecrypted >>> payload(.uuid >>> .tagged, .rawRepresentable))
+    %> queryParam("payload", .appDecrypted >>> payload(.uuid >>> .newtype, .rawRepresentable))
     <% end,
 
   .expressUnsubscribeReply
@@ -246,21 +246,21 @@ private let routers: [Router<Route>] = [
     <¢> get <% end,
 
   .invite <<< .accept
-    <¢> post %> lit("invites") %> pathParam(.uuid >>> .tagged) <% lit("accept") <% end,
+    <¢> post %> lit("invites") %> pathParam(.uuid >>> .newtype) <% lit("accept") <% end,
 
   .invite <<< .resend
-    <¢> post %> lit("invites") %> pathParam(.uuid >>> .tagged) <% lit("resend") <% end,
+    <¢> post %> lit("invites") %> pathParam(.uuid >>> .newtype) <% lit("resend") <% end,
 
   .invite <<< .revoke
-    <¢> post %> lit("invites") %> pathParam(.uuid >>> .tagged) <% lit("revoke") <% end,
+    <¢> post %> lit("invites") %> pathParam(.uuid >>> .newtype) <% lit("revoke") <% end,
 
   .invite <<< .send
     // TODO: this weird Optional.iso.some is cause `formField` takes a partial iso `String -> A` instead of
     //       `(String?) -> A` like it is for `queryParam`.
-    <¢> post %> lit("invites") %> formField("email", Optional.iso.some >>> opt(.rawRepresentable)) <% end,
+    <¢> post %> lit("invites") %> formField("email", Optional.iso.some >>> opt(.newtype)) <% end,
 
   .invite <<< .show
-    <¢> get %> lit("invites") %> pathParam(.rawRepresentable >>> .rawRepresentable) <% end,
+    <¢> get %> lit("invites") %> pathParam(.rawRepresentable >>> .newtype) <% end,
 
   .login
     <¢> get %> lit("login") %> queryParam("redirect", opt(.string)) <% end,
@@ -287,12 +287,12 @@ private let routers: [Router<Route>] = [
 
   .team <<< .remove
     <¢> post %> lit("account") %> lit("team") %> lit("members")
-    %> pathParam(.uuid >>> .tagged)
+    %> pathParam(.uuid >>> .newtype)
     <% lit("remove")
     <% end,
 
   .useEpisodeCredit
-    <¢> post %> lit("episodes") %> pathParam(.int >>> .tagged) <% lit("credit") <% end,
+    <¢> post %> lit("episodes") %> pathParam(.int >>> .newtype) <% lit("credit") <% end,
 
   .webhooks <<< .stripe <<< .event
     <¢> post %> lit("webhooks") %> lit("stripe")
